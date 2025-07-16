@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delydonuts - Deliciosos Donuts Frescos</title>
+    <!-- Tailwind CSS CDN para estilos rápidos y responsivos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuente Inter de Google Fonts para una tipografía moderna -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para íconos de redes sociales y otros elementos visuales -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilo base del cuerpo para la fuente y color de fondo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fce4ec; /* Rosa muy claro */
+        }
+        /* Colores personalizados de la marca Delydonuts */
+        .text-delidonuts-primary {
+            color: #d81b60; /* Rosa oscuro principal */
+        }
+        .bg-delidonuts-secondary {
+            background-color: #ff80ab; /* Rosa medio secundario */
+        }
+        /* Estilos para el botón principal */
+        .btn-primary {
+            background-color: #d81b60; /* Rosa oscuro */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px; /* Completamente redondeado */
+            transition: background-color 0.3s ease; /* Transición suave al pasar el ratón */
+        }
+        .btn-primary:hover {
+            background-color: #ad1457; /* Rosa más oscuro al pasar el ratón */
+        }
+        /* Estilos para las tarjetas de menú */
+        .card {
+            background-color: white;
+            border-radius: 1rem; /* Bordes redondeados */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+            overflow: hidden; /* Asegura que el contenido no se desborde de los bordes redondeados */
+        }
+        /* Estilos para los enlaces de navegación */
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: #ffe0b2; /* Fondo claro al pasar el ratón */
+            color: #d81b60; /* Color primario */
+            transform: translateY(-2px); /* Pequeño efecto de elevación */
+        }
+        /* Estilo para el enlace de navegación activo */
+        .nav-link-active {
+            background-color: #d81b60; /* Fondo rosa oscuro para el activo */
+            color: white; /* Texto blanco para el activo */
+            font-weight: 700; /* Más grueso */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para el activo */
+        }
+        .nav-link-active:hover {
+            background-color: #ad1457; /* Mantener el color oscuro al pasar el ratón en activo */
+            color: white;
+        }
+        /* Asegura que el contenido principal esté por encima de cualquier fondo o elemento flotante */
+        main, header, footer {
+            position: relative;
+            z-index: 10;
+            opacity: 1;
+        }
+        /* Estilos para el menú móvil desplegable */
+        .mobile-menu {
+            transition: max-height 0.3s ease-out; /* Transición suave para el despliegue */
+            max-height: 0; /* Oculto por defecto */
+            overflow: hidden; /* Oculta el contenido que se desborda */
+        }
+        .mobile-menu.open {
+            max-height: 500px; /* Altura máxima para mostrar el contenido cuando está abierto */
+        }
+
+        /* Estilos para el modal de mensaje */
+        .message-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .message-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .message-modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            max-width: 90%;
+            width: 400px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        .message-modal.show .message-modal-content {
+            transform: translateY(0);
+        }
+        .message-modal-content h4 {
+            color: #d81b60;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .message-modal-content p {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+        }
+        .message-modal-content button {
+            background-color: #d81b60;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .message-modal-content button:hover {
+            background-color: #ad1457;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Encabezado de la página -->
+    <header class="bg-white shadow-md py-4 px-6 md:px-12 flex justify-between items-center rounded-b-xl">
+        <div class="flex items-center">
+            <!-- Logo de Delydonuts -->
+            <img src="logo.jpeg" alt="Logo de Delydonuts, una dona con glaseado rosa" class="h-20 w-20 rounded-full mr-3">
+            <div class="flex flex-col items-start">
+                <h1 class="text-3xl font-bold text-delidonuts-primary">Delydonuts</h1>
+                <p class="text-sm text-gray-600 mt-0.5">pequeñas pero las más sabrosas</p>
+            </div>
+        </div>
+        <!-- Navegación de escritorio (visible solo en pantallas medianas y grandes) -->
+        <nav id="desktop-nav" class="hidden md:flex space-x-2">
+            <a href="#inicio" class="nav-link text-gray-700 font-medium nav-link-active">Inicio</a>
+            <a href="#nosotros" class="nav-link text-gray-700 font-medium">Nosotros</a>
+            <!-- Se ha eliminado el enlace al menú de la navegación principal -->
+            <a href="#publicidad" class="nav-link text-gray-700 font-medium">Publicidad</a>
+            <a href="#contacto" class="nav-link text-gray-700 font-medium">Contacto</a>
+        </nav>
+        <!-- Botón de Menú Móvil (visible solo en pantallas pequeñas) -->
+        <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none" aria-label="Abrir menú móvil">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+    </header>
+
+    <!-- Menú Móvil desplegable (oculto por defecto, se muestra con JS) -->
+    <nav id="mobile-menu" class="mobile-menu bg-white shadow-md md:hidden mx-4 rounded-b-xl">
+        <div class="flex flex-col items-center py-4 space-y-2">
+            <a href="#inicio" class="nav-link text-gray-700 font-medium w-full text-center py-2" onclick="document.getElementById('mobile-menu').classList.remove('open');">Inicio</a>
+            <a href="#nosotros" class="nav-link text-gray-700 font-medium w-full text-center py-2" onclick="document.getElementById('mobile-menu').classList.remove('open');">Nosotros</a>
+            <!-- Se ha eliminado el enlace al menú de la navegación móvil -->
+            <a href="#publicidad" class="nav-link text-gray-700 font-medium w-full text-center py-2" onclick="document.getElementById('mobile-menu').classList.remove('open');">Publicidad</a>
+            <a href="#contacto" class="nav-link text-gray-700 font-medium w-full text-center py-2" onclick="document.getElementById('mobile-menu').classList.remove('open');">Contacto</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Sección de Inicio/Héroe -->
+        <section id="inicio" class="content-section relative bg-delidonuts-secondary text-white py-20 md:py-32 text-center rounded-xl mx-4 mt-6 overflow-hidden">
+            <!-- Imagen de fondo con opacidad para el efecto de héroe -->
+            <div class="absolute inset-0 bg-cover bg-center opacity-30" style="background-image: url('https://placehold.co/1200x600/ff80ab/ffffff?text=Deliciosos+Donuts');"></div>
+            <div class="relative z-10 max-w-4xl mx-auto px-4">
+                <h2 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6 animate-pulse">
+                    ¡Tan pequeñas y tan irresistibles!
+                </h2>
+                <p class="text-lg md:text-xl mb-8">
+                    Donuts frescos, hechos con amor y los ingredientes más deliciosos.
+                </p>
+                <!-- El botón "Ver Nuestro Menú" ahora dirige directamente a la sección de menú -->
+                <a href="#menu" class="btn-primary inline-block text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 nav-link">
+                    Ver Nuestro Menú
+                </a>
+            </div>
+        </section>
+
+        <!-- Sección Nosotros -->
+        <section id="nosotros" class="content-section hidden py-16 md:py-24 bg-white mx-4 mt-6 rounded-xl shadow-lg">
+            <div class="max-w-6xl mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center gap-8">
+                <div class="md:w-1/2">
+                    <img src="https://placehold.co/600x400/fce4ec/d81b60?text=Donuts+recién+hechos+con+amor" alt="Donuts recién hechos en una bandeja, con un corazón dibujado en uno de ellos" class="rounded-2xl shadow-lg w-full h-auto object-cover">
+                </div>
+                <div class="md:w-1/2 text-center md:text-left">
+                    <h3 class="text-3xl md:text-4xl font-bold text-delidonuts-primary mb-6">
+                        Sobre Delydonuts
+                    </h3>
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        En Delydonuts, creemos que cada día merece un toque de dulzura. Horneamos nuestros donuts frescos cada mañana, utilizando solo los ingredientes de la más alta calidad y un montón de pasión.
+                    </p>
+                    <p class="text-gray-700 leading-relaxed">
+                        Desde los clásicos glaseados hasta nuestras creaciones más innovadoras, cada donut es una pequeña obra de arte diseñada para deleitar tu paladar. ¡Ven y prueba la diferencia!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Menú -->
+        <section id="menu" class="content-section hidden py-16 md:py-24 bg-fce4ec mx-4 mt-6 rounded-xl shadow-lg">
+            <div class="max-w-6xl mx-auto px-4 md:px-8">
+                <h3 class="text-3xl md:text-4xl font-bold text-center text-delidonuts-primary mb-12">
+                    Nuestro Delicioso Menú
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Donut Clásico Glaseado -->
+                    <div class="card p-6 text-center">
+                        <img src="https://placehold.co/400x300/ffcdd2/d81b60?text=Donut+Clásico+Glaseado" alt="Donut clásico con glaseado blanco" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Clásico Glaseado</h4>
+                        <p class="text-gray-600 mb-4">El favorito de siempre, suave y perfectamente dulce.</p>
+                        <span class="text-delidonuts-primary text-2xl font-bold">$1.50</span>
+                    </div>
+                    <!-- Donut Chocolate Crunch -->
+                    <div class="card p-6 text-center">
+                        <img src="https://placehold.co/400x300/ffcdd2/d81b60?text=Donut+Chocolate+Crunch" alt="Donut cubierto de chocolate con trocitos crujientes" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Chocolate Crunch</h4>
+                        <p class="text-gray-600 mb-4">Cubierto de chocolate y trocitos crujientes.</p>
+                        <span class="text-delidonuts-primary text-2xl font-bold">$2.00</span>
+                    </div>
+                    <!-- Donut Fresa con Sprinkles -->
+                    <div class="card p-6 text-center">
+                        <img src="https://placehold.co/400x300/ffcdd2/d81b60?text=Donut+Fresa+Sprinkles" alt="Donut con glaseado de fresa y sprinkles de colores" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Fresa con Sprinkles</h4>
+                        <p class="text-gray-600 mb-4">Sabor a fresa con coloridos sprinkles.</p>
+                        <span class="text-delidonuts-primary text-2xl font-bold">$1.75</span>
+                    </div>
+                    <!-- Mini Donut de Vainilla -->
+                    <div class="card p-6 text-center relative">
+                        <img src="https://placehold.co/400x300/ffcdd2/d81b60?text=Mini+Vainilla" alt="Mini donut con glaseado de vainilla" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <!-- Insignia "MINI" para destacar -->
+                        <span class="absolute top-4 right-4 bg-delidonuts-primary text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">MINI</span>
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Mini Vainilla</h4>
+                        <p class="text-gray-600 mb-4">Pequeñas delicias con glaseado de vainilla.</p>
+                        <span class="text-delidonuts-primary text-2xl font-bold">$1.00 (unidad)</span>
+                    </div>
+                    <!-- Mini Donut de Chocolate -->
+                    <div class="card p-6 text-center relative">
+                        <img src="https://placehold.co/400x300/ffcdd2/d81b60?text=Mini+Chocolate" alt="Mini donut cubierto de chocolate" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <!-- Insignia "MINI" para destacar -->
+                        <span class="absolute top-4 right-4 bg-delidonuts-primary text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">MINI</span>
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Mini Chocolate</h4>
+                        <p class="text-gray-600 mb-4">Mini donuts cubiertos de chocolate, perfectos para un bocado.</p>
+                        <span class="text-delidonuts-primary text-2xl font-bold">$1.25 (unidad)</span>
+                    </div>
+                    <!-- Mini Donut Variado -->
+                    <div class="card p-6 text-center relative">
+                        <img src="https://placehold.co/400x300/ffcdd2/d81b60?text=Mini+Donut+Variado" alt="Caja de mini donuts variados" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <!-- Insignia "MINI" para destacar -->
+                        <span class="absolute top-4 right-4 bg-delidonuts-primary text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">MINI</span>
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Mini Variado</h4>
+                        <p class="text-gray-600 mb-4">Una selección de nuestros mini donuts más populares.</p>
+                        <span class="text-delidonuts-primary text-2xl font-bold">$5.00 (caja de 6)</span>
+                    </div>
+                    <!-- Donut Crema Bavaria -->
+                    <div class="card p-6 text-center">
+                        <img src="https://placehold.co/400x300/ffcdd2/d81b60?text=Donut+Crema+Bavaria" alt="Donut relleno de crema bavaria" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Crema Bavaria</h4>
+                        <p class="text-gray-600 mb-4">Relleno cremoso, una delicia irresistible.</p>
+                        <span class="text-delidonuts-primary text-2xl font-bold">$2.25</span>
+                    </div>
+                    <!-- Donut Manzana y Canela -->
+                    <div class="card p-6 text-center">
+                        <img src="https://placehold.co/400x300/ffcdd2/d81b60?text=Donut+Manzana+Canela" alt="Donut con sabor a manzana y canela" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Manzana y Canela</h4>
+                        <p class="text-gray-600 mb-4">El toque perfecto de especias y fruta.</p>
+                        <span class="text-delidonuts-primary text-2xl font-bold">$2.00</span>
+                    </div>
+                    <!-- Donut Red Velvet -->
+                    <div class="card p-6 text-center">
+                        <img src="https://placehold.co/400x300/ffcdd2/d81b60?text=Donut+Red+Velvet" alt="Donut Red Velvet con glaseado de queso crema" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Red Velvet</h4>
+                        <p class="text-gray-600 mb-4">Elegante y delicioso, con un toque de queso crema.</p>
+                        <span class="text-delidonuts-primary text-2xl font-bold">$2.50</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Publicidad -->
+        <section id="publicidad" class="content-section hidden py-16 md:py-24 bg-white mx-4 mt-6 rounded-xl shadow-lg">
+            <div class="max-w-4xl mx-auto px-4 md:px-8 text-center">
+                <h3 class="text-3xl md:text-4xl font-bold text-delidonuts-primary mb-8">
+                    Nuestra Publicidad
+                </h3>
+                <p class="text-gray-700 mb-8">
+                    ¡Descubre nuestras promociones especiales y mensajes que endulzan el día! Mantente atento a nuestras redes sociales para no perderte ninguna oferta.
+                </p>
+                <div class="flex justify-center">
+                    <img src="https://placehold.co/700x400/ff80ab/ffffff?text=Publicidad+Delydonuts" alt="Anuncio publicitario de Delydonuts con donuts apetitosos" class="max-w-full h-auto rounded-lg shadow-lg">
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Contacto -->
+        <section id="contacto" class="content-section hidden py-16 md:py-24 bg-white mx-4 mt-6 rounded-xl shadow-lg">
+            <div class="max-w-4xl mx-auto px-4 md:px-8 text-center">
+                <h3 class="text-3xl md:text-4xl font-bold text-delidonuts-primary mb-8">
+                    Contáctanos
+                </h3>
+                <p class="text-gray-700 mb-8">
+                    ¿Tienes alguna pregunta, quieres hacer un pedido especial o simplemente saludar? ¡Estamos aquí para ayudarte!
+                </p>
+                <form id="contact-form" class="grid grid-cols-1 gap-6 max-w-lg mx-auto">
+                    <input type="text" placeholder="Tu Nombre" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-delidonuts-primary" aria-label="Tu Nombre">
+                    <input type="email" placeholder="Tu Correo Electrónico" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-delidonuts-primary" aria-label="Tu Correo Electrónico">
+                    <textarea placeholder="Tu Mensaje" rows="5" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-delidonuts-primary" aria-label="Tu Mensaje"></textarea>
+                    <button type="submit" class="btn-primary w-full font-semibold text-lg hover:shadow-xl transform hover:scale-105">
+                        Enviar Mensaje
+                    </button>
+                    <p class="text-sm text-gray-500 mt-2">
+                        *Este formulario es solo de demostración y no envía mensajes reales.
+                    </p>
+                </form>
+                <div class="mt-12 text-gray-700">
+                    <p class="mb-2">📍 Dirección: Instituto Nacional De El Congo (INCO), El Congo, Santa Ana</p>
+                    <!-- Espacio para un mapa de Google Maps incrustado -->
+                    <div class="mt-4 mb-4 rounded-lg overflow-hidden shadow-md" style="position:relative;padding-bottom:56.25%;height:0;">
+                        <!-- Reemplaza 'YOUR_GOOGLE_MAPS_EMBED_CODE' con el código de incrustación real de Google Maps -->
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3876.43981804561!2d-89.5165975851897!3d13.91696209033621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f627b0a7b0a7b0b%3A0x7b0a7b0a7b0a7b0a!2sInstituto%20Nacional%20De%20El%20Congo%20(INCO)!5e0!3m2!1ses-419!2ssv!4v1678912345678!5m2!1ses-419!2ssv"
+                            width="600" height="450" style="border:0;position:absolute;left:0;top:0;height:100%;width:100%;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <p class="mb-2">📞 Teléfono: +503 1234-5678</p>
+                    <p class="mb-2">⏰ Horarios de atención: Lunes a Viernes de 8:00 AM a 5:00 PM</p>
+                    <p>📸 Instagram: <a href="https://www.instagram.com/dely._donuts" target="_blank" class="text-delidonuts-primary hover:underline" aria-label="Visita nuestro Instagram">@dely._donuts</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="bg-delidonuts-primary text-white py-8 mt-6 text-center rounded-t-xl">
+        <div class="max-w-6xl mx-auto px-4">
+            <p>&copy; 2025 Delydonuts. Todos los derechos reservados.</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="#" class="hover:text-gray-200" aria-label="Visita nuestro Facebook"><i class="fab fa-facebook-f text-xl"></i></a>
+                <a href="https://www.instagram.com/dely._donuts" target="_blank" class="hover:text-gray-200" aria-label="Visita nuestro Instagram"><i class="fab fa-instagram text-xl"></i></a>
+                <a href="#" class="hover:text-gray-200" aria-label="Visita nuestro Twitter"><i class="fab fa-twitter text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de Mensaje Personalizado -->
+    <div id="message-modal" class="message-modal">
+        <div class="message-modal-content">
+            <h4 id="modal-title">¡Mensaje Enviado!</h4>
+            <p id="modal-message">Gracias por tu mensaje. Este formulario es solo de demostración y no envía datos reales.</p>
+            <button id="close-modal-button">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Selecciona todos los enlaces de navegación y las secciones de contenido
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const contactForm = document.getElementById('contact-form');
+            const messageModal = document.getElementById('message-modal');
+            const closeModalButton = document.getElementById('close-modal-button');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+
+            // Función para mostrar la sección activa y ocultar las demás
+            function showSection(sectionId) {
+                // Oculta todas las secciones de contenido
+                contentSections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+
+                // Muestra la sección correspondiente al ID proporcionado
+                const activeSection = document.querySelector(sectionId);
+                if (activeSection) {
+                    activeSection.classList.remove('hidden');
+                }
+
+                // Actualiza la clase 'nav-link-active' en los enlaces de navegación
+                navLinks.forEach(link => {
+                    link.classList.remove('nav-link-active'); // Remueve la clase de todos
+                    // Compara el href del enlace con el sectionId para activar el correcto
+                    if (link.getAttribute('href') === sectionId) {
+                        link.classList.add('nav-link-active'); // Añade la clase al enlace activo
+                    }
+                });
+            }
+
+            // Función para mostrar el modal de mensaje
+            function showMessageModal(title, message) {
+                modalTitle.textContent = title;
+                modalMessage.textContent = message;
+                messageModal.classList.add('show');
+            }
+
+            // Función para ocultar el modal de mensaje
+            function hideMessageModal() {
+                messageModal.classList.remove('show');
+            }
+
+            // Añade un 'event listener' a cada enlace de navegación para cambiar de sección
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // Evita el comportamiento predeterminado del ancla (salto de página)
+                    const sectionId = this.getAttribute('href'); // Obtiene el ID de la sección del atributo href
+                    showSection(sectionId); // Llama a la función para mostrar la sección
+                });
+            });
+
+            // Maneja el clic del botón del menú móvil para mostrar/ocultar el menú
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('open'); // Alterna la clase 'open' para mostrar/ocultar
+            });
+
+            // Cierra el menú móvil cuando se hace clic en un enlace dentro de él
+            mobileMenu.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.remove('open'); // Cierra el menú
+                });
+            });
+
+            // Maneja el envío del formulario de contacto
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Evita el envío real del formulario
+                    showMessageModal('¡Mensaje Enviado!', 'Gracias por tu mensaje. Este formulario es solo de demostración y no envía datos reales.');
+                    // Opcional: Resetear el formulario después de mostrar el mensaje
+                    contactForm.reset();
+                });
+            }
+
+            // Maneja el clic en el botón de cerrar del modal
+            if (closeModalButton) {
+                closeModalButton.addEventListener('click', hideMessageModal);
+            }
+
+            // Determina qué sección mostrar al cargar la página
+            const initialHash = window.location.hash; // Obtiene el hash de la URL (ej. #contacto)
+            if (initialHash && document.querySelector(initialHash)) {
+                showSection(initialHash); // Si hay un hash válido, muestra esa sección
+            } else {
+                showSection('#inicio'); // Si no hay hash o es inválido, muestra la sección de inicio por defecto
+            }
+        });
+    </script>
+</body>
+</html>
